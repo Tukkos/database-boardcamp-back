@@ -15,13 +15,17 @@ async function categoriesSchemaValidation(req, res, next) {
     next();
 };
 
-async function categoriesDuplicateValidation(req, res, next) {
-    const name = req.body.name;
-    const categories = await connection.query(`SELECT * FROM categories WHERE name = $1;`, [name]);
+async function newCategoryValidation(req, res, next) {
+    const categoryName = req.body.name;
+    const categories = await connection.query(`
+        SELECT * FROM categories
+        WHERE name = $1;
+        `, [categoryName]
+    );
     if (categories.rows.length > 0) {
         return res.status(409).send('Categoria já existente');
     };
     next();
 };
 
-export { categoriesSchemaValidation, categoriesDuplicateValidation };
+export { categoriesSchemaValidation, newCategoryValidation };

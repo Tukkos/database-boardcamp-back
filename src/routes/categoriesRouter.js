@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { getCategories, postCategories } from '../controllers/categoriesController.js';
-import { categoriesDuplicateValidation, categoriesSchemaValidation } from '../middlewares/categoriesValidation.js';
+import { newCategoryValidation, categoriesSchemaValidation } from '../middlewares/categoriesValidation.js';
 
 const categoriesRouter = express.Router();
 
@@ -13,7 +13,7 @@ categoriesRouter.get(
 categoriesRouter.post(
     '/categories',
     categoriesSchemaValidation,
-    categoriesDuplicateValidation,
+    newCategoryValidation,
     postCategories
 );
 
