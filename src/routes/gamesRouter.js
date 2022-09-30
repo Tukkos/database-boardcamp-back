@@ -15,6 +15,6 @@ gamesRouter.post(
     newGameValidation,
     categoryExistsValidation,
     postGames
-)
+);
 
 export default gamesRouter;

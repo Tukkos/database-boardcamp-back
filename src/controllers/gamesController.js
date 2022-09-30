@@ -5,7 +5,6 @@ async function getGames (req, res) {
     let games = [];
 
     try {
-        console.log(search);
         if (search === undefined) {
             games = await connection.query(`
                 SELECT * FROM games;
@@ -35,6 +34,6 @@ async function postGames (req, res) {
     } catch (error) {
         res.status(500).send(error.message);
     };
-}
+};
 
 export { getGames, postGames };
