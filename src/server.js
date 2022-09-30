@@ -1,10 +1,13 @@
-import express, { application } from 'express';
+import express from 'express';
+import cors from "cors";
 
 import categoriesRouter from './routes/categoriesRouter.js';
 import gamesRouter from './routes/gamesRouter.js';
 
 const server = express();
 server.use(express.json());
+server.use(cors());
+
 server.use(categoriesRouter);
 server.use(gamesRouter);
 
