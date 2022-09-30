@@ -15,6 +15,6 @@ categoriesRouter.post(
     categoriesSchemaValidation,
     categoriesDuplicateValidation,
     postCategories
-)
+);
 
 export default categoriesRouter;

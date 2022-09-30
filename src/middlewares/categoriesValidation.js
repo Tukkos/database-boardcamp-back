@@ -16,9 +16,9 @@ async function categoriesSchemaValidation(req, res, next) {
 };
 
 async function categoriesDuplicateValidation(req, res, next) {
-    const name = req.body;
-    const categories = await connection.query(`SELECT * FROM categories WHERE name = '${name}';`);
-    if (categories) {
+    const name = req.body.name;
+    const categories = await connection.query(`SELECT * FROM categories WHERE name = $1;`, [name]);
+    if (categories.rows.length > 0) {
         return res.status(409).send('Categoria já existente');
     };
     next();
