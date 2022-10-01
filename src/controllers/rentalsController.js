@@ -45,11 +45,11 @@ async function postRentals(req, res) {
     const pricePerDay = res.locals.pricePerDay;
     const originalPrice = pricePerDay * daysRented;
     try {
-        await connection.query(`
-            INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "originalPrice")
-            VALUES ($1, $2, $3, $4, $5);
-            `, [customerId, gameId, rentDate, daysRented, originalPrice]
-        );
+        // await connection.query(`
+        //     INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "originalPrice")
+        //     VALUES ($1, $2, $3, $4, $5);
+        //     `, [customerId, gameId, rentDate, daysRented, originalPrice]
+        // );
         res.sendStatus(201);
     } catch (error) {
         res.status(500).send(error.message);

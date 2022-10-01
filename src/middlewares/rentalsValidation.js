@@ -50,10 +50,11 @@ async function gameIsAvaliable(req, res, next) {
     const gameId = req.body.gameId;
     const rentals = await connection.query(`
         SELECT * FROM rentals
-        WHERE "gameId" = $1;
+        WHERE "gameId" = $1
+        AND "returnDate" IS NULL;
         `, [gameId]
     );
-    console.log(rentals.rows.length);
+    console.log(rentals.rows[0]);
     if (rentals.rows.length >= stockTotal) {
         return res.status(400).send("Sem estoque do jogo!");
     };
