@@ -25,9 +25,22 @@ async function newCpfValidation(req, res, next) {
         `, [cpf]
     );
     if (customers.rows.length > 0) {
-        return res.status(400).send('Cliente já existente');
+        return res.status(400).send('CPF já cadastrado');
     };
     next();
 };
 
-export { customersSchemaValidation, newCpfValidation };
+async function findCustomer(req, res, next) {
+    const id = req.params.id;
+    const customer = await connection.query(`
+        SELECT * FROM customers
+        WHERE id = $1;
+        `, [id]
+    );
+    if (!customer.rows[0]) {
+        return res.status(404).send("Usuário não encontrado");
+    };
+    next();
+}
+
+export { customersSchemaValidation, newCpfValidation, findCustomer };

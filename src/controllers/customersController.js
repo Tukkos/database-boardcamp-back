@@ -53,4 +53,22 @@ async function postCustomers (req, res) {
     };
 };
 
-export { getCustomers, getCustomersById, postCustomers };
+async function updateCustomers (req, res) {
+    const id = req.params.id;
+    const { name, phone, cpf, birthday } = req.body;
+    try {
+        await connection.query(`
+            UPDATE customers
+            SET name = $1,
+                phone = $2,
+                cpf = $3,
+                birthday = $4
+            WHERE id = $5;
+            `, [name, phone, cpf, birthday, id])
+        res.sendStatus(200);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+
+export { getCustomers, getCustomersById, postCustomers, updateCustomers };

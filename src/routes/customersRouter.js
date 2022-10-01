@@ -1,6 +1,6 @@
 import express from 'express';
-import { getCustomers, getCustomersById, postCustomers } from '../controllers/customersController.js';
-import { customersSchemaValidation, newCpfValidation } from '../middlewares/customersValidation.js';
+import { getCustomers, getCustomersById, postCustomers, updateCustomers } from '../controllers/customersController.js';
+import { customersSchemaValidation, findCustomer, newCpfValidation } from '../middlewares/customersValidation.js';
 
 const customersRouter = express.Router();
 
@@ -20,5 +20,13 @@ customersRouter.post(
     newCpfValidation,
     postCustomers
 );
+
+customersRouter.put(
+    '/customers/:id',
+    customersSchemaValidation,
+    newCpfValidation,
+    findCustomer,
+    updateCustomers
+)
 
 export default customersRouter;
