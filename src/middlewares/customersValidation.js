@@ -38,9 +38,9 @@ async function findCustomer(req, res, next) {
         `, [id]
     );
     if (!customer.rows[0]) {
-        return res.status(404).send("Usuário não encontrado");
+        return res.status(404).send("Cliente não encontrado");
     };
     next();
-}
+};
 
 export { customersSchemaValidation, newCpfValidation, findCustomer };
