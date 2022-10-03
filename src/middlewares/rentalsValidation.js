@@ -61,4 +61,28 @@ async function gameIsAvaliable(req, res, next) {
     next();
 };
 
-export { rentalSchemaValidation, doesCustomerExists, doesGameExists, gameIsAvaliable };
+async function rentalExists(req, res, next) {
+    const id = req.params.id;
+    const rental = await connection.query(`
+        SELECT * FROM rentals
+        WHERE id = $1;
+        `, [id]
+    );
+    if (rental.rows[0] === undefined) {
+        return res.status(404).send('Aluguel não encontrado.');
+    };
+    res.locals.rental = rental.rows[0];
+    next();
+};
+
+async function isRentalReturned(req, res, next) {
+    const returnDate = res.locals.rental.returnDate;
+    let isReturned = false;
+    if (returnDate != null) {
+        isReturned = true;
+    };
+    res.locals.isReturned = isReturned;
+    next();
+};
+
+export { rentalSchemaValidation, doesCustomerExists, doesGameExists, gameIsAvaliable, rentalExists, isRentalReturned };

@@ -7,12 +7,30 @@ async function getGames (req, res) {
     try {
         if (search === undefined) {
             games = await connection.query(`
-                SELECT * FROM games;
+                SELECT
+                    games.name,
+                    games.image,
+                    games."stockTotal",
+                    games."categoryId",
+                    games."pricePerDay",
+                    categories.name AS "categoryName"
+                FROM games
+                JOIN categories
+                    ON games."categoryId" = categories.id;
             `);
         } else {
             games = await connection.query(`
-                SELECT * FROM games
-                WHERE name LIKE $1;
+                SELECT
+                    games.name,
+                    games.image,
+                    games."stockTotal",
+                    games."categoryId",
+                    games."pricePerDay",
+                    categories.name AS "categoryName"
+                FROM games
+                JOIN categories
+                    ON games."categoryId" = categories.id
+                WHERE games.name LIKE $1;
                 `, [`%${search}%`]
             );
         };

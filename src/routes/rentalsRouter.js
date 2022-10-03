@@ -1,6 +1,6 @@
 import express from 'express';
-import { getRentals, postRentals } from '../controllers/rentalsController.js';
-import { doesCustomerExists, doesGameExists, gameIsAvaliable, rentalSchemaValidation } from '../middlewares/rentalsValidation.js';
+import { deleteRentalsById, getRentals, postRentals, postRentalsReturn } from '../controllers/rentalsController.js';
+import { doesCustomerExists, doesGameExists, gameIsAvaliable, isRentalReturned, rentalExists, rentalSchemaValidation } from '../middlewares/rentalsValidation.js';
 
 const rentalsRouter = express.Router();
 
@@ -17,5 +17,19 @@ rentalsRouter.post(
     gameIsAvaliable,
     postRentals
 );
+
+rentalsRouter.post(
+    '/rentals/:id/return',
+    rentalExists,
+    isRentalReturned,
+    postRentalsReturn
+);
+
+rentalsRouter.delete(
+    '/rentals/:id',
+    rentalExists,
+    isRentalReturned,
+    deleteRentalsById
+)
 
 export default rentalsRouter;
