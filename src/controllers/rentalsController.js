@@ -4,96 +4,6 @@ import dayjs from "dayjs";
 let now = dayjs();
 const date = now.format("DD/MM/YYYY");
 
-// async function getRentals(req, res) {
-//     const customerId = req.query.customerId;
-//     const gameId = req.query.gameId;
-
-//     let rentals = [];
-//     let response = {};
-//     try {
-//         const customer = await connection.query(`
-//             SELECT
-//                 customers.id,
-//                 customers.name
-//             FROM customers
-//             WHERE id = $1;
-//             `, [customerId]
-//         );
-
-//         const game = await connection.query(`
-//             SELECT
-//                 games.id,
-//                 games.name,
-//                 games."categoryId",
-//                 categories.name AS "categoryName"
-//             FROM games
-//             JOIN categories
-//                 ON games."categoryId" = categories.id
-//             WHERE games.id = $1;
-//             `, [gameId]
-//         );
-
-//         if (customerId === undefined && gameId === undefined) {
-//             rentals = await connection.query(`
-//                 SELECT * FROM rentals
-//                 WHERE "gameId" = $1
-//                 AND "customerId" = $2;
-//                 `, [gameId, customerId]
-//             );
-//             response = [
-//                 {
-//                     ...rentals.rows[0],
-//                     customer: customer.rows[0],
-//                     game: game.rows[0]
-//                 }
-//             ];
-//         } else if (customerId === undefined && gameId != undefined) {
-//             rentals = await connection.query(`
-//                 SELECT * FROM rentals
-//                 WHERE "gameId" = $1;
-//                 `, [gameId]
-//             );
-//             response = [
-//                 {
-//                     ...rentals.rows[0],
-//                     game: game.rows[0]
-//                 }
-//             ];
-//         } else if (customerId != undefined && gameId === undefined) {
-//             rentals = await connection.query(`
-//                 SELECT * FROM rentals
-//                 WHERE "customerId" = $1;
-//                 `, [customerId]
-//             );
-//             response = [
-//                 {
-//                     ...rentals.rows[0],
-//                     customer: customer.rows[0]
-//                 }
-//             ];
-//         } else {
-//             rentals = await connection.query(`
-//                 SELECT * FROM rentals
-//                 WHERE "gameId" = $1
-//                 AND "customerId" = $2;
-//                 `, [gameId, customerId]
-//             );
-//             response = [
-//                 {
-//                     ...rentals.rows[0],
-//                     customer: customer.rows[0],
-//                     game: game.rows[0]
-//                 }
-//             ];
-//         };
-        
-//         console.log(response);
-//         res.status(201).send(response);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     };
-// };
-
 async function getRentals(req, res) {
     const customerId = req.query.customerId;
     const gameId = req.query.gameId;
@@ -101,26 +11,73 @@ async function getRentals(req, res) {
     try {
         if (customerId === undefined && gameId === undefined) {
             rentals = await connection.query(`
-                    SELECT * FROM rentals;
+            SELECT
+                rentals.*,
+                json_build_object(
+                    'id', customers.id,
+                    'name', customers.name
+                ) AS customer,
+                json_build_object(
+                    'id', games.id,
+                    'name', games.name,
+                    'categoryId', games."categoryId",
+                    'categoryName', categories.name
+                ) AS game
+            FROM rentals
+            JOIN customers
+                ON rentals."customerId" = customers.id
+            JOIN games
+                ON rentals."gameId" = games.id
+            JOIN categories
+                ON games."categoryId" = categories.id;
             `);
         } else if (customerId === undefined && gameId != undefined) {
             rentals = await connection.query(`
-                SELECT * FROM rentals
+                SELECT
+                    rentals.*,
+                    json_build_object(
+                        'id', customers.id,
+                        'name', customers.name
+                    ) AS customer,
+                    json_build_object(
+                        'id', games.id,
+                        'name', games.name,
+                        'categoryId', games."categoryId",
+                        'categoryName', categories.name
+                    ) AS game
+                FROM rentals
+                JOIN customers
+                    ON rentals."customerId" = customers.id
+                JOIN games
+                    ON rentals."gameId" = games.id
+                JOIN categories
+                    ON games."categoryId" = categories.id
                 WHERE "gameId" = $1;
                 `, [gameId]
             );
         } else if (customerId != undefined && gameId === undefined) {
             rentals = await connection.query(`
-                SELECT * FROM rentals
+                SELECT
+                    rentals.*,
+                    json_build_object(
+                        'id', customers.id,
+                        'name', customers.name
+                    ) AS customer,
+                    json_build_object(
+                        'id', games.id,
+                        'name', games.name,
+                        'categoryId', games."categoryId",
+                        'categoryName', categories.name
+                    ) AS game
+                FROM rentals
+                JOIN customers
+                    ON rentals."customerId" = customers.id
+                JOIN games
+                    ON rentals."gameId" = games.id
+                JOIN categories
+                    ON games."categoryId" = categories.id
                 WHERE "customerId" = $1;
                 `, [customerId]
-            );
-        } else {
-            rentals = await connection.query(`
-                SELECT * FROM rentals
-                WHERE "gameId" = $1
-                AND "customerId" = $2;
-                `, [gameId, customerId]
             );
         };
         res.status(201).send(rentals.rows);
