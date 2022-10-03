@@ -1,6 +1,6 @@
 import connection from "../database/db.js";
 
-async function getCategories (req, res) {
+async function getCategories(req, res) {
     try {
         const categories = await connection.query(`
             SELECT * FROM categories;
@@ -11,7 +11,7 @@ async function getCategories (req, res) {
     };
 };
 
-async function postCategories (req, res) {
+async function postCategories(req, res) {
     const { name } = req.body;
     try {
         await connection.query(`

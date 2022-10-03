@@ -1,6 +1,6 @@
 import connection from "../database/db.js";
 
-async function getCustomers (req, res) {
+async function getCustomers(req, res) {
     const cpf = req.query.cpf;
     let customers = [];
 
@@ -22,7 +22,7 @@ async function getCustomers (req, res) {
     };
 };
 
-async function getCustomersById (req, res) {
+async function getCustomersById(req, res) {
     const id = req.params.id;
     try {
         const customers = await connection.query(`
@@ -39,7 +39,7 @@ async function getCustomersById (req, res) {
     };
 };
 
-async function postCustomers (req, res) {
+async function postCustomers(req, res) {
     const { name, phone, cpf, birthday } = req.body;
     try {
         await connection.query(`
@@ -53,7 +53,7 @@ async function postCustomers (req, res) {
     };
 };
 
-async function updateCustomers (req, res) {
+async function updateCustomers(req, res) {
     const id = req.params.id;
     const { name, phone, cpf, birthday } = req.body;
     try {

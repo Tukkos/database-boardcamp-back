@@ -1,6 +1,6 @@
 import connection from "../database/db.js";
 
-async function getGames (req, res) {
+async function getGames(req, res) {
     const search = req.query.name;
     let games = [];
 
@@ -40,7 +40,7 @@ async function getGames (req, res) {
     };
 };
 
-async function postGames (req, res) {
+async function postGames(req, res) {
     const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
     try {
         await connection.query(`
